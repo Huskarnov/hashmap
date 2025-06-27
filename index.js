@@ -53,14 +53,64 @@ class LinkedList {
     return false;
   }
 
-  // remove(key){
-  //   let current = this.head;
-  //   while(current){
-  //     if(current.value[0] == key){
-  //       current = current.
-  //     }
-  //   }
-  // }
+  remove(key) {
+    let current = this.head;
+
+    if (this.head.value[0] == key) {
+      this.head = this.head.next;
+    }
+
+    while (current && current.next) {
+      if (current.next.value[0] == key) {
+        current.next = current.next.next;
+        return;
+      }
+      current = current.next;
+    }
+  }
+
+  key_sum() {
+    let sum = 0;
+    let current = this.head;
+    while (current) {
+      sum += 1;
+      current = current.next;
+    }
+    return sum;
+  }
+
+  keys() {
+    let keysArray = [];
+    let current = this.head;
+    while (current) {
+      keysArray.push(current.value[0]);
+      current = current.next;
+    }
+
+    return keysArray;
+  }
+
+  values() {
+    let valuesArray = [];
+    let current = this.head;
+    while (current) {
+      valuesArray.push(current.value[1]);
+      current = current.next;
+    }
+
+    return valuesArray;
+  }
+
+  entries() {
+    let entriesArray = [];
+    let current = this.head;
+    while (current) {
+      entriesArray.push([current.value[0], current.value[1]]);
+      current = current.next;
+    }
+
+    return entriesArray;
+  }
 }
 class Node {
   constructor(value, next) {
@@ -137,12 +187,54 @@ class HashMap {
   remove(key) {
     for (let i = 0; i < this.capacity; i++) {
       if (this.buckets[i]) {
-        if (this.buckets[i].has(key)) {
-          return true;
-        }
+        this.buckets[i].remove(key);
       }
     }
-    return false;
+    return;
+  }
+
+  length() {
+    let stored_keys = 0;
+    for (let i = 0; i < this.capacity; i++) {
+      if (this.buckets[i]) {
+        stored_keys += this.buckets[i].key_sum();
+      }
+    }
+    return stored_keys;
+  }
+
+  clear() {
+    this.buckets = Array(16);
+    this.actual_content = 0;
+  }
+
+  keys() {
+    let keysArray = [];
+    for (let i = 0; i < this.capacity; i++) {
+      if (this.buckets[i]) {
+        keysArray = [...keysArray, ...this.buckets[i].keys()];
+      }
+    }
+    return keysArray;
+  }
+  values() {
+    let valuesArray = [];
+    for (let i = 0; i < this.capacity; i++) {
+      if (this.buckets[i]) {
+        valuesArray = [...valuesArray, ...this.buckets[i].values()];
+      }
+    }
+    return valuesArray;
+  }
+
+  entries() {
+    let entriesArray = [];
+    for (let i = 0; i < this.capacity; i++) {
+      if (this.buckets[i]) {
+        entriesArray = [...entriesArray, this.buckets[i].entries()];
+      }
+    }
+    return entriesArray;
   }
 }
 
@@ -160,7 +252,6 @@ hashy.set("ice cream", "white");
 hashy.set("jacket", "blue");
 hashy.set("lion", "golden");
 hashy.set("kite", "pink");
-hashy.set("kite", "red");
 hashy.set("kope", "red");
 
 hashy.set("fac", "golden");
@@ -180,10 +271,7 @@ hashy.set("dove", "pink");
 hashy.set("park", "red");
 hashy.set("hot", "golden");
 hashy.set("inter", "pink");
-hashy.set("park", "rolling");
-hashy.set("robot", "trollo");
 
 console.log(hashy.buckets);
 console.log(hashy.actual_content);
-
-console.log(hashy.has("jacket"));
+console.log(hashy.entries());

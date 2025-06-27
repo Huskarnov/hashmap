@@ -138,11 +138,9 @@ class HashMap {
     return hashCode;
   }
 
-  set(key, value) {
+  set_no_enlarge(key, value) {
     let hash = this.hash(key);
     let key_value = [key, value];
-
-    // console.log(key, hash);
 
     if (!this.buckets[hash]) {
       this.buckets[hash] = new LinkedList();
@@ -151,14 +149,25 @@ class HashMap {
     } else {
       this.buckets[hash].replaceIfFoundOrAppend(key_value);
     }
-    this.enlarge();
   }
 
   enlarge() {
     if (this.actual_content / this.capacity >= this.load_factor) {
-      this.buckets = [...this.buckets, ...Array(this.buckets.length)];
+      let entriesArray = this.entries().flat();
+
       this.capacity *= 2;
+      this.buckets = Array(this.capacity);
+      this.actual_content = 0;
+
+      entriesArray.forEach((element) => {
+        this.set_no_enlarge(element[0], element[1]);
+      });
     }
+  }
+
+  set(key, value) {
+    this.set_no_enlarge(key, value);
+    this.enlarge();
   }
 
   get(key) {
@@ -271,7 +280,8 @@ hashy.set("dove", "pink");
 hashy.set("park", "red");
 hashy.set("hot", "golden");
 hashy.set("inter", "pink");
+hashy.set("elephant", "red");
 
 console.log(hashy.buckets);
 console.log(hashy.actual_content);
-console.log(hashy.entries());
+console.log(hashy.keys());

@@ -240,10 +240,22 @@ class HashMap {
     let entriesArray = [];
     for (let i = 0; i < this.capacity; i++) {
       if (this.buckets[i]) {
-        entriesArray = [...entriesArray, this.buckets[i].entries()];
+        // entriesArray = [...entriesArray, this.buckets[i].entries()];
+        entriesArray.push(this.buckets[i].entries());
+        // const someEntries = this.buckets[i].entries();
+        // someEntries.forEach((element) => {
+        //   entriesArray.push(element);
+        // });
       }
     }
+    // const flatEntries = entriesArray.flat();
+    // console.log(flatEntries);
+    // return flatEntries;
     return entriesArray;
+  }
+
+  flatEntries() {
+    return this.entries().flat();
   }
 }
 
@@ -281,7 +293,11 @@ hashy.set("park", "red");
 hashy.set("hot", "golden");
 hashy.set("inter", "pink");
 hashy.set("elephant", "red");
+hashy.set("apple", "grey");
+hashy.set("inter", "blue");
 
-console.log(hashy.buckets);
-console.log(hashy.actual_content);
-console.log(hashy.keys());
+// console.log(hashy.buckets);
+// console.log(hashy.actual_content);
+
+// console.log(hashy.keys());
+console.log(hashy.flatEntries());
